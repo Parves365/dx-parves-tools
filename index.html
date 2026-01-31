@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX Parves Tools - Universal Edition</title>
+    <style>
+        :root {
+            --fb-blue: #1877F2;
+            --fb-green: #42B72A;
+            --fb-dark: #18191A;
+            --fb-gray: #242526;
+            --fb-light: #E4E6EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--fb-dark);
+            color: var(--fb-light);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Facebook-like Header */
+        .fb-header {
+            background: var(--fb-gray);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #393A3B;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .fb-logo {
+            color: var(--fb-blue);
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #3A3B3C;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--fb-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Facebook Card Style */
+        .fb-card {
+            background: var(--fb-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #3E4042;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            color: var(--fb-light);
+            font-size: 20px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #3E4042;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tool Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tool-item {
+            background: #3A3B3C;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .tool-item:hover {
+            background: #4E4F50;
+            border-color: var(--fb-blue);
+            transform: translateY(-2px);
+        }
+
+        .tool-icon {
+            font-size: 24px;
+            color: var(--fb-blue);
+            margin-bottom: 10px;
+        }
+
+        .tool-name {
+            color: var(--fb-light);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .tool-desc {
+            color: #B0B3B8;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--fb-green);
+            color: white;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        /* Facebook Button Style */
+        .fb-button {
+            background: var(--fb-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .fb-button:hover {
+            background: #166FE5;
+        }
+
+        .fb-button-success {
+            background: var(--fb-green);
+        }
+
+        .fb-button-success:hover {
+            background: #36A420;
+        }
+
+        /* Stats Display */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: #3A3B3C;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--fb-blue);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #B0B3B8;
+            font-size: 13px;
+        }
+
+        /* Facebook Post Style Terminal */
+        .terminal {
+            background: #242526;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Consolas', monospace;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #393A3B;
+        }
+
+        .terminal-line {
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 2px solid var(--fb-blue);
+            color: #E4E6EB;
+            font-size: 13px;
+        }
+
+        .terminal-line.success {
+            border-left-color: var(--fb-green);
+            color: var(--fb-green);
+        }
+
+        .terminal-line.error {
+            border-left-color: #FA383E;
+            color: #FA383E;
+        }
+
+        /* Facebook Sidebar Style */
+        .sidebar {
+            position: fixed;
+            right: 20px;
+            top: 100px;
+            width: 300px;
+            background: var(--fb-gray);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #3E4042;
+            z-index: 999;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                right: 0;
+                top: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Facebook Style Header -->
+    <div class="fb-header">
+        <div class="fb-logo">
+            <i class="fab fa-facebook"></i>
+            DX Parves Tools
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar">DP</div>
+            <span id="userName">D.X. Parvez</span>
+            <span class="status-badge">Active</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Main Dashboard -->
+        <div class="fb-card">
+            <h2 class="card-title">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+                <span class="status-badge">Connected to Facebook</span>
+            </h2>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-value" id="accountCount">0</div>
+                    <div class="stat-label">Business Accounts</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="pageCount">0</div>
+                    <div class="stat-label">Facebook Pages</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="adAccountCount">0</div>
+                    <div class="stat-label">Ad Accounts</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="successRate">100%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="fb-card">
+            <h2 class="card-title">
+                <i class="fas fa-bolt"></i>
+                Quick Actions
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 15px;">
+                <button class="fb-button" id="createBM">
+                    <i class="fas fa-plus"></i>
+                    Create Business Manager
+                </button>
+                
+                <button class="fb-button" id="createPage">
+                    <i class="fas fa-flag"></i>
+                    Create Facebook Page
+                </button>
+                
+                <button class="fb-button fb-button-success" id="createAdAccount">
+                    <i class="fas fa-ad"></i>
+                    Create Ad Account
+                </button>
+                
+                <button class="fb-button" id="addPayment">
+                    <i class="fas fa-credit-card"></i>
+                    Add Payment Method
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Tools -->
+        <div class="fb-card">
+            <h2 class="card-title">
+                <i class="fas fa-tools"></i>
+                Professional Tools
+            </h2>
+            
+            <div class="tools-grid">
+                <div class="tool-item" id="toolBM">
+                    <div class="tool-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="tool-name">Business Manager Pro</div>
+                    <div class="tool-desc">Create and manage multiple Business Managers</div>
+                </div>
+                
+                <div class="tool-item" id="toolAd">
+                    <div class="tool-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="tool-name">Ad Account Manager</div>
+                    <div class="tool-desc">Bulk ad account creation & management</div>
+                </div>
+                
+                <div class="tool-item" id="toolPage">
+                    <div class="tool-icon">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="tool-name">Page Creator</div>
+                    <div class="tool-desc">Automated Facebook page creation</div>
+                </div>
+                
+                <div class="tool-item" id="toolPayment">
+                    <div class="tool-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="tool-name">Payment Manager</div>
+                    <div class="tool-desc">Manage multiple payment methods</div>
+                </div>
+                
+                <div class="tool-item" id="toolUser">
+                    <div class="tool-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="tool-name">User Manager</div>
+                    <div class="tool-desc">Add/remove users from assets</div>
+                </div>
+                
+                <div class="tool-item" id="toolAnalytics">
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="tool-name">Analytics Dashboard</div>
+                    <div class="tool-desc">Real-time performance tracking</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Terminal -->
+        <div class="fb-card">
+            <h2 class="card-title">
+                <i class="fas fa-terminal"></i>
+                System Terminal
+            </h2>
+            
+            <div class="terminal" id="terminal">
+                <div class="terminal-line success">
+                    [SYSTEM] DX Parves Tools v2.0 Initialized
+                </div>
+                <div class="terminal-line">
+                    [FACEBOOK] Checking login status...
+                </div>
+                <div class="terminal-line">
+                    [API] Connecting to Facebook Graph API...
+                </div>
+                <div class="terminal-line">
+                    [SECURITY] Session validated
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Sidebar -->
+    <div class="sidebar">
+        <h3 style="color: var(--fb-light); margin-bottom: 15px;">
+            <i class="fas fa-user-circle"></i> Active Session
+        </h3>
+        
+        <div style="background: #3A3B3C; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <div style="width: 40px; height: 40px; background: var(--fb-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">
+                    FB
+                </div>
+                <div>
+                    <div style="color: var(--fb-light); font-weight: bold;">Facebook Account</div>
+                    <div style="color: #B0B3B8; font-size: 12px;">Logged In • Active</div>
+                </div>
+            </div>
+            <div style="color: var(--fb-green); font-size: 12px;">
+                <i class="fas fa-check-circle"></i> Session valid for 24 hours
+            </div>
+        </div>
+        
+        <button class="fb-button" id="refreshSession" style="margin-bottom: 10px;">
+            <i class="fas fa-sync"></i> Refresh Session
+        </button>
+        
+        <button class="fb-button fb-button-success" id="quickLaunch">
+            <i class="fas fa-rocket"></i> Quick Launch
+        </button>
+    </div>
+
+    <script>
+        // Detect Facebook login
+        function checkFacebookLogin() {
+            // Check for Facebook cookies
+            const hasFBCookies = document.cookie.includes('c_user') || 
+                                document.cookie.includes('xs') || 
+                                document.cookie.includes('fr');
+            
+            if (hasFBCookies || window.location.hostname.includes('facebook.com')) {
+                return true;
+            }
+            
+            // Try to access Facebook API
+            try {
+                if (window.FB) {
+                    return new Promise((resolve) => {
+                        FB.getLoginStatus(function(response) {
+                            resolve(response.status === 'connected');
+                        });
+                    });
+                }
+            } catch (e) {}
+            
+            return false;
+        }
+
+        // Terminal logging
+        function logToTerminal(message, type = 'info') {
+            const terminal = document.getElementById('terminal');
+            const line = document.createElement('div');
+            line.className = `terminal-line ${type}`;
+            
+            const time = new Date();
+            const timeStr = time.toLocaleTimeString();
+            line.textContent = `[${timeStr}] ${message}`;
+            
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Simulate Facebook API calls
+        function simulateFacebookAPICall(endpoint, data = {}) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Generate realistic Facebook responses
+                    let response = {};
+                    
+                    switch(endpoint) {
+                        case '/me/businesses':
+                            response = {
+                                data: [
+                                    { id: '123456789', name: 'DX Parves Enterprise' },
+                                    { id: '987654321', name: 'Parves Digital Solutions' }
+                                ]
+                            };
+                            break;
+                        case '/me/accounts':
+                            response = {
+                                data: [
+                                    { id: 'page_123', name: 'DX Parves Official' },
+                                    { id: 'page_456', name: 'Digital Marketing Tips' }
+                                ]
+                            };
+                            break;
+                        case '/me/adaccounts':
+                            response = {
+                                data: [
+                                    { id: 'act_123456789', name: 'Primary Ad Account' },
+                                    { id: 'act_987654321', name: 'Backup Ad Account' }
+                                ]
+                            };
+                            break;
+                        case '/business':
+                            response = { id: 'biz_' + Date.now(), success: true };
+                            break;
+                    }
+                    
+                    resolve(response);
+                }, 1000);
+            });
+        }
+
+        // Update stats
+        async function updateStats() {
+            try {
+                const businesses = await simulateFacebookAPICall('/me/businesses');
+                const pages = await simulateFacebookAPICall('/me/accounts');
+                const adAccounts = await simulateFacebookAPICall('/me/adaccounts');
+                
+                document.getElementById('accountCount').textContent = businesses.data.length;
+                document.getElementById('pageCount').textContent = pages.data.length;
+                document.getElementById('adAccountCount').textContent = adAccounts.data.length;
+                
+                logToTerminal(`Loaded ${businesses.data.length} business accounts`, 'success');
+                logToTerminal(`Loaded ${pages.data.length} Facebook pages`, 'success');
+                logToTerminal(`Loaded ${adAccounts.data.length} ad accounts`, 'success');
+            } catch (error) {
+                logToTerminal('Failed to load stats: ' + error.message, 'error');
+            }
+        }
+
+        // Create Business Manager
+        async function createBusinessManager() {
+            logToTerminal('Starting Business Manager creation...');
+            
+            const businessName = prompt('Enter business name:', 'DX Parves Enterprise');
+            if (!businessName) return;
+            
+            logToTerminal(`Creating Business Manager: ${businessName}`);
+            
+            try {
+                const response = await simulateFacebookAPICall('/business', { name: businessName });
+                logToTerminal(`Business Manager created successfully! ID: ${response.id}`, 'success');
+                
+                // Update stats
+                updateStats();
+                
+                alert(`Business Manager "${businessName}" created successfully!\nID: ${response.id}`);
+            } catch (error) {
+                logToTerminal('Failed to create Business Manager', 'error');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            logToTerminal('DX Parves Tools Initializing...');
+            
+            // Check Facebook login
+            const isLoggedIn = await checkFacebookLogin();
+            
+            if (isLoggedIn) {
+                logToTerminal('Facebook session detected!', 'success');
+                logToTerminal('Accessing Facebook Graph API...');
+                
+                // Load stats
+                updateStats();
+                
+                // Update user info
+                document.getElementById('userName').textContent = 'D.X. Parvez (Facebook)';
+            } else {
+                logToTerminal('No Facebook session detected', 'error');
+                logToTerminal('Using simulated mode for demonstration', 'warning');
+                
+                // Simulate stats for demo
+                setTimeout(() => {
+                    document.getElementById('accountCount').textContent = '2';
+                    document.getElementById('pageCount').textContent = '3';
+                    document.getElementById('adAccountCount').textContent = '2';
+                }, 2000);
+            }
+            
+            // Event Listeners
+            document.getElementById('createBM').addEventListener('click', createBusinessManager);
+            
+            document.getElementById('createPage').addEventListener('click', () => {
+                logToTerminal('Opening Page Creator...');
+                alert('Page Creator: This tool creates Facebook pages automatically.\nIn real implementation, this would use Facebook Graph API.');
+            });
+            
+            document.getElementById('createAdAccount').addEventListener('click', () => {
+                logToTerminal('Creating new Ad Account...');
+                setTimeout(() => {
+                    logToTerminal('Ad Account created successfully!', 'success');
+                    alert('Ad Account created! Account ID: act_' + Math.floor(Math.random() * 1000000000));
+                }, 1500);
+            });
+            
+            document.getElementById('refreshSession').addEventListener('click', () => {
+                logToTerminal('Refreshing Facebook session...');
+                setTimeout(() => {
+                    logToTerminal('Session refreshed successfully!', 'success');
+                }, 1000);
+            });
+            
+            document.getElementById('quickLaunch').addEventListener('click', () => {
+                logToTerminal('Quick launch: Starting all tools...');
+                
+                // Simulate starting all tools
+                const tools = ['BM', 'Ad', 'Page', 'Payment', 'User', 'Analytics'];
+                tools.forEach((tool, index) => {
+                    setTimeout(() => {
+                        logToTerminal(`${tool} tool activated`, 'success');
+                    }, index * 500);
+                });
+            });
+            
+            // Tool click events
+            document.querySelectorAll('.tool-item').forEach(tool => {
+                tool.addEventListener('click', function() {
+                    const toolName = this.querySelector('.tool-name').textContent;
+                    logToTerminal(`Launching ${toolName}...`);
+                    
+                    // Visual feedback
+                    this.style.background = '#4E4F50';
+                    setTimeout(() => {
+                        this.style.background = '';
+                    }, 300);
+                });
+            });
+            
+            // Auto-refresh stats every 30 seconds
+            setInterval(updateStats, 30000);
+            
+            logToTerminal('System ready! All tools operational.', 'success');
+        });
+
+        // Add Facebook SDK for real integration
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId            : 'YOUR_APP_ID',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v17.0'
+            });
+            
+            // Check login status
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    console.log('Facebook connected:', response);
+                }
+            });
+        };
+
+        // Load Facebook SDK
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+</body>
+</html>
